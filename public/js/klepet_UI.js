@@ -1,6 +1,11 @@
 function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
-  if (jeSmesko) {
+  var pic = sporocilo.indexOf(('http://' || 'https://') && ('.png'||'.jpg' ||'.gif'));
+
+  if (pic) {
+    return $('<div style="font-weight: bold"></div>').html(sporocilo);
+  }
+   if (jeSmesko) {
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
   } else {
@@ -15,6 +20,8 @@ function divElementHtmlTekst(sporocilo) {
 function procesirajVnosUporabnika(klepetApp, socket) {
   var sporocilo = $('#poslji-sporocilo').val();
   sporocilo = dodajSmeske(sporocilo);
+  sporocilo = addImg(sporocilo);
+  
   var sistemskoSporocilo;
 
   if (sporocilo.charAt(0) == '/') {
@@ -115,6 +122,13 @@ $(document).ready(function() {
   
   
 });
+
+function addImg(besedilo){
+  
+  var besediloResult =besedilo.replace(/([a-z\-_0-9\/\:\.]*\.(jpg|png|gif))/gi,"<img src='$1' id='images' />" );
+   
+  return besediloResult;
+ }
 
 function dodajSmeske(vhodnoBesedilo) {
   var preslikovalnaTabela = {
